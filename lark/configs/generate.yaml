@@ -1,0 +1,40 @@
+# mysql配置
+mysql:
+  address: "127.0.0.1:3306"
+  username: root
+  password:
+  db: canary
+  max_open_conn: 20
+  max_idle_conn: 10
+  conn_lifetime: 120000
+  charset: utf8
+generate:
+  # 项目名称
+  package_name: suzuku
+  # 服务名称
+  service_name: user
+  # 接口名称
+  api_name: user_list
+  # mysql数据表
+  table_name: vip_users
+  # sql语句
+  sql: "SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE gender=1 LIMIT 10 OFFSET 10;"
+  # 操作 1:插入 2:更新 3:删除(软删除) 4:查询
+  action: 4
+
+#  -- 1、create
+#
+#  -- 2、update_user
+#  UPDATE vip_users SET firstname='1',lastname='3' WHERE uid=1 AND lark_id='lark123';
+#
+#  -- 3、delete_user
+#  UPDATE vip_users SET deleted_ts=1 WHERE uid=1 AND lark_id='2';
+#
+#  -- 4、user_details
+#  SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE uid=1;
+#
+#  -- 5、user_list
+#  SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE gender=1 LIMIT 10 OFFSET 10;
+#
+#  -- 6、statistics
+#  SELECT u.uid,COUNT(DISTINCT (r.repo_id)) repo_id,SUM(tr.reward_num) reward_num FROM vip_users u LEFT JOIN repos r ON r.uid=u.uid LEFT JOIN task_rewards tr ON tr.repo_id=r.repo_id WHERE u.gender=1 AND u.city_id=1 AND u.nickname LIKE 'hu%' AND u.birth_ts> 0 GROUP BY u.uid LIMIT 10 OFFSET 10;
