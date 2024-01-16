@@ -20,19 +20,28 @@ var (
 )
 
 type MysqlClient struct {
-	db  *gorm.DB
-	cfg *conf.Mysql
+	db        *gorm.DB
+	cfg       *conf.Mysql
+	connected bool
 }
 
 func NewMysqlClient(cfg *conf.Mysql) *MysqlClient {
+	var (
+		err error
+	)
 	cli = &MysqlClient{cfg: cfg}
-	cli.db, _ = ConnectDB(cfg)
+	cli.db, err = ConnectDB(cfg)
+	cli.connected = err == nil
 	return cli
 }
 
 func GetDB() *gorm.DB {
 	if cli.db == nil {
-		cli.db, _ = ConnectDB(cli.cfg)
+		var (
+			err error
+		)
+		cli.db, err = ConnectDB(cli.cfg)
+		cli.connected = err == nil
 	}
 	return cli.db
 }
@@ -67,11 +76,11 @@ func Transaction(handle func(tx *gorm.DB) (err error)) (err error) {
 
 func ConnectDB(cfg *conf.Mysql) (db *gorm.DB, err error) {
 	var (
-		args  string
+		dsn   string
 		opts  *gorm.Config
 		sqlDB *sql.DB
 	)
-	args = fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
+	dsn = fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
 		cfg.Username,
 		cfg.Password,
 		cfg.Address,
@@ -82,7 +91,7 @@ func ConnectDB(cfg *conf.Mysql) (db *gorm.DB, err error) {
 		PrepareStmt:            false, // 创建并缓存预编译语句(true: Error 1295)
 	}
 
-	db, err = gorm.Open(mysql.Open(args), opts)
+	db, err = gorm.Open(mysql.Open(dsn), opts)
 	if err != nil {
 		xlog.Error(err.Error())
 		return
@@ -114,6 +123,13 @@ func GetDbName(db *gorm.DB) string {
 		return ""
 	}
 	return dbName
+}
+
+func Connected() bool {
+	if cli == nil {
+		return false
+	}
+	return cli.connected
 }
 
 /*
