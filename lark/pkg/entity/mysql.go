@@ -44,12 +44,6 @@ type MysqlQuery struct {
 	Sort   string
 }
 
-func NewQuery() *MysqlQuery {
-	return &MysqlQuery{
-		Args: make([]interface{}, 0),
-	}
-}
-
 func NewMysqlQuery() *MysqlQuery {
 	return &MysqlQuery{
 		Query: "deleted_ts=0",
@@ -59,8 +53,7 @@ func NewMysqlQuery() *MysqlQuery {
 
 func NewNormalQuery() *MysqlQuery {
 	return &MysqlQuery{
-		Query: "1=1",
-		Args:  make([]interface{}, 0),
+		Args: make([]interface{}, 0),
 	}
 }
 
@@ -161,7 +154,7 @@ func (m *MysqlQuery) Reset() {
 func (m *MysqlQuery) Normal() {
 	m.Model = nil
 	m.Fields = ""
-	m.Query = "1=1"
+	m.Query = ""
 	m.Args = make([]interface{}, 0)
 	m.Sort = ""
 	m.Limit = 0
@@ -188,6 +181,19 @@ func (m *MysqlQuery) Delete(db *gorm.DB) (err error) {
 	return db.Model(m.Model).Where(m.Query, m.Args...).Update(Deleted()).Error
 }
 
+func (m *MysqlQuery) SetConditions(obj any) {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i).Interface()
+		tag := field.Tag.Get("where")
+		if tag != "" {
+			m.SetFilter(tag+"=?", value)
+		}
+	}
+}
+
 type MysqlUpdate struct {
 	Query  string
 	Args   []interface{}
@@ -196,7 +202,6 @@ type MysqlUpdate struct {
 
 func NewMysqlUpdate() *MysqlUpdate {
 	return &MysqlUpdate{
-		Query:  "1=1",
 		Args:   make([]interface{}, 0),
 		Values: make(map[string]interface{}),
 	}
@@ -242,7 +247,7 @@ func (m *MysqlUpdate) Reset() {
 }
 
 func (m *MysqlUpdate) Normal() {
-	m.Query = "1=1"
+	m.Query = ""
 	m.Args = make([]interface{}, 0)
 	m.Values = make(map[string]interface{})
 }
@@ -253,4 +258,21 @@ func (m *MysqlUpdate) Updates(db *gorm.DB, model interface{}) *gorm.DB {
 
 func (m *MysqlUpdate) Delete(db *gorm.DB, model interface{}) *gorm.DB {
 	return db.Model(model).Where(m.Query, m.Args...).Update(Deleted())
+}
+
+func (m *MysqlUpdate) SetConditionsAndValues(obj any) {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i).Interface()
+		tag := field.Tag.Get("where")
+		if tag != "" {
+			m.SetFilter(tag+"=?", value)
+		}
+		tag = field.Tag.Get("update")
+		if tag != "" {
+			m.Set(tag, value)
+		}
+	}
 }
