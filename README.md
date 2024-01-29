@@ -1,5 +1,5 @@
 # gengo（mac/linux版）
-go crud代码生成器：一键将sql转成go api业务代码
+gengo 不仅仅是一个crud代码生成器，还是一个go项目开发脚手架，通过sql脚本直接生成规范统一的业务代码，并且可以直接使用。
 
 ### 1、编辑配置文件./configs/generate.yaml
 ```
