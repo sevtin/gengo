@@ -1,5 +1,5 @@
 # gengo（mac/linux版）
-gengo 不仅仅是一个crud代码生成器，还是一个go项目开发脚手架，通过sql脚本直接生成规范统一的业务代码，让后台api开发提升n倍速度。
+gengo 不仅仅是一个 CRUD 代码生成器，更是一个 Go 项目开发脚手架。通过 SQL 脚本直接生成规范统一的业务代码，能够显著提升后台 API 开发的效率。
 
 ### 1、编辑配置文件./configs/generate.yaml
 ```
