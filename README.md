@@ -31,7 +31,7 @@ generate:
   action: 4
 ```
 
-### 2、执行./xgen-mac [或] ./xgen-linux命令
+### 2、执行./xgen-mac [或] .\xgen-win.exe [或] ./xgen-linux命令
 执行命令前代码文件结构
 
 ![Snip20240105_3.png](lark%2Fassets%2Fimages%2FSnip20240105_3.png)
