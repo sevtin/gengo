@@ -24,7 +24,7 @@ generate:
   api_name: vip_user_info
   # mysql数据表 [action==0/1,必传]
   table_name: vip_users
-  # sql语句 [action!=1,必传]
+  # sql语句 [action>1,必传]
   sql: "SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE uid=1;"
   # 操作 0:CURD初始化 1:插入 2:更新 3:删除(软删除) 4:查询
   action: 0
