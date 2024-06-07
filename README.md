@@ -15,20 +15,19 @@ mysql:
   max_idle_conn: 10
   conn_lifetime: 120000
   charset: utf8
-  debug: true
 generate:
-  # 项目名称
+  # 项目名称 [必传]
   package_name: suzuku
-  # 服务名称
+  # 服务名称 [必传]
   service_name: user
-  # 接口名称
-  api_name: user_list
-  # mysql数据表
+  # 接口名称 [必传]
+  api_name: vip_user_info
+  # mysql数据表 [action==0/1,必传]
   table_name: vip_users
-  # sql语句
-  sql: "SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE gender=1 LIMIT 10 OFFSET 10;"
-  # 操作 1:插入 2:更新 3:删除(软删除) 4:查询
-  action: 4
+  # sql语句 [action>1,必传]
+  sql: "SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE uid=1;"
+  # 操作 0:CURD初始化 1:插入 2:更新 3:删除(软删除) 4:查询
+  action: 0
 ```
 
 ### 2、执行./xgen-mac [或] .\xgen-win.exe [或] ./xgen-linux命令
