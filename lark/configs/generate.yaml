@@ -14,29 +14,29 @@ generate:
   # 服务名称 [必传]
   service_name: user
   # 接口名称 [必传]
-  api_name: user_details
-  # mysql数据表 [action==1,必传]
+  api_name: vip_user_info
+  # mysql数据表 [action==0/1,必传]
   table_name: vip_users
   # sql语句 [action!=1,必传]
   sql: "SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE uid=1;"
-  # 操作 1:插入 2:更新 3:删除(软删除) 4:查询
-  action: 4
+  # 操作 0:CURD初始化 1:插入 2:更新 3:删除(软删除) 4:查询
+  action: 0
 
-#  -- 1、create
+#  -- 1、create_vip_user
 #
-#  -- 2、update_user
+#  -- 2、update_vip_user
 #  UPDATE vip_users SET firstname='1',lastname='3' WHERE uid=1 AND lark_id='lark123';
 #
-#  -- 3、delete_user
+#  -- 3、delete_vip_user
 #  UPDATE vip_users SET deleted_ts=1 WHERE uid=1 AND lark_id='2';
 #
-#  -- 4、user_details
+#  -- 4、vip_user_info
 #  SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE uid=1;
 #
-#  -- 5、user_list
+#  -- 4、vip_user_list
 #  SELECT uid,lark_id,udid,firstname,lastname,gender FROM vip_users WHERE gender=1 LIMIT 10 OFFSET 10;
 #
-#  -- 6、statistics
+#  -- 4、statistics
 #  SELECT u.uid,
 #  COUNT(DISTINCT (r.repo_id)) repo_id,
 #  SUM(tr.reward_num) total,
